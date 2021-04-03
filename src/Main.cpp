@@ -1,15 +1,32 @@
-#include <cstdio>
+#include <SFML/Graphics.hpp>
 
-#define UNUSED(x) (static_cast<void>(x))
-#define _UNICODE(x) (L##x)
-#define _CSTD ::
+// Please don't kill me...
+using namespace sf;
 
-extern "C" int __cdecl main(unsigned long int nArgs, const char *args[])
+Vector2f operator -(const Vector2f &l, const Vector2f &r)
+{ return { l.x - r.x, l.y - r.y }; }
+
+Vector2f operator /(const Vector2f &l, float r)
+{ return { l.x / r, l.y / r }; }
+
+int main(int nArgs, char *args[])
 {
-	UNUSED(nArgs);
-	UNUSED(args);
+	RenderWindow wnd({ 512, 512 }, "Nacre Tower Defence - Treidex");
 
-	UNUSED(_CSTD fputws(_UNICODE("Hello, world"), _CSTD __acrt_iob_func(1)));
-	UNUSED(_CSTD fgetwc(_CSTD __acrt_iob_func(0)));
-	return 0x00000000;
+	CircleShape circle(100, 12);
+	circle.setPosition(wnd.getView().getCenter() - Vector2f(circle.getRadius(), circle.getRadius()));
+	circle.setFillColor(Color(0xFbF4E2FF));
+	while (wnd.isOpen())
+	{
+		Event e;
+		while (wnd.pollEvent(e))
+		{
+			if (e.type == Event::Closed)
+				wnd.close();
+		}
+
+		wnd.clear(Color(0x404040FF));
+		wnd.draw(circle);
+		wnd.display();
+	}
 }
